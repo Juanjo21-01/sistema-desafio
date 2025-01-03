@@ -1,11 +1,7 @@
+import Rutas from './routes/routes';
+
 function App() {
-  return (
-    <div>
-      <h1 className="text-3xl font-bold text-center p-5">
-        Mi Tiendita Online
-      </h1>
-    </div>
-  );
+  return <Rutas />;
 }
 
 export default App;
