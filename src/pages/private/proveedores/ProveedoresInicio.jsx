@@ -18,7 +18,6 @@ function ProveedoresInicio() {
       nit: '123456789',
       telefono: '1234567890',
       estado: 'Activo',
-      rol: 'Administrador',
     },
     {
       id: 2,
@@ -27,7 +26,6 @@ function ProveedoresInicio() {
       nit: '987654321',
       telefono: '0987654321',
       estado: 'Inactivo',
-      rol: 'Empleado',
     },
   ];
 

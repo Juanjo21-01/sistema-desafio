@@ -14,7 +14,7 @@ export const FormularioProveedor = ({ proveedor, onGuardar, onClose }) => {
   } = useForm({
     resolver: yupResolver(proveedorValidation),
     defaultValues: {
-      nombre: proveedor?.nombres || '',
+      nombre: proveedor?.nombre || '',
       direccion: proveedor?.direccion || '',
       nit: proveedor?.nit || '',
       telefono: proveedor?.telefono || '',
