@@ -20,6 +20,7 @@ import ComprasInicio from '../pages/private/compras/ComprasInicio';
 import CompraCrear from '../pages/private/compras/CompraCrear';
 import CompraDetalle from '../pages/private/compras/CompraDetalle';
 import OrdenesInicio from '../pages/private/ordenes/OrdenesInicio';
+import OrdenesPendientes from '../pages/private/ordenes/OrdenesPendientes';
 import OrdenDetalle from '../pages/private/ordenes/OrdenDetalle';
 import Carrito from '../pages/private/Carrito';
 import CheckOut from '../pages/private/CheckOut';
@@ -96,6 +97,7 @@ const Rutas = () => {
               element={<RutaProtegidaRol rolesPermitidos={[1, 2]} />}
             >
               <Route index element={<OrdenesInicio />} />
+              <Route path="pendientes" element={<OrdenesPendientes />} />
               <Route path=":id" element={<OrdenDetalle />} />
             </Route>
 
