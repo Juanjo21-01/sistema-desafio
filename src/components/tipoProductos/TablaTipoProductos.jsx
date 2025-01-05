@@ -19,7 +19,7 @@ export const TablaTipoProductos = ({
           </tr>
         </thead>
 
-        <tbody className="divide-y dark:divide-gray-700">
+        <tbody className="divide-y dark:divide-gray-700 text-center">
           {tipoProductos.length === 0 && (
             <tr>
               <td colSpan="4" className="text-center">

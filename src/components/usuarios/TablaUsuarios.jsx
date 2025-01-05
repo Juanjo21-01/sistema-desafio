@@ -17,7 +17,7 @@ export const TablaUsuarios = ({ usuarios, onEditar, onEliminar, onEstado }) => {
           </tr>
         </thead>
 
-        <tbody className="divide-y dark:divide-gray-700">
+        <tbody className="divide-y dark:divide-gray-700 text-center">
           {usuarios.length === 0 && (
             <tr>
               <td colSpan="7" className="text-center">

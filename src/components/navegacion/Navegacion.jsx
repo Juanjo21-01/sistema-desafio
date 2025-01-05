@@ -171,7 +171,7 @@ export const Navegacion = () => {
                   </NavLink>
                 </li>
                 {/* Reportes */}
-                <li>
+                {/* <li>
                   <NavLink
                     to="/"
                     className={({ isActive }) =>
@@ -185,7 +185,7 @@ export const Navegacion = () => {
                     <FaClipboardList className="w-5 h-5" />
                     <span className="hidden md:inline-block">Reportes</span>
                   </NavLink>
-                </li>
+                </li> */}
               </ul>
             </>
           )}

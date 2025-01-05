@@ -23,7 +23,7 @@ export const TablaProductos = ({
           </tr>
         </thead>
 
-        <tbody className="divide-y dark:divide-gray-700">
+        <tbody className="divide-y dark:divide-gray-700 text-center">
           {productos.length === 0 && (
             <tr>
               <td colSpan="7" className="text-center">
