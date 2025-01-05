@@ -47,7 +47,7 @@ export const FormularioTipoProducto = ({
       <div className="flex flex-col md:flex-row justify-between gap-4 mb-2">
         {/* Nombre */}
         <div className="form-control w-full text-gray-700">
-          <label htmlFor="nombre" className="label label-text text-gray-700">
+          <label htmlFor="nombre" className="label label-text font-semibold text-gray-700">
             Nombre
           </label>
           <input
@@ -55,7 +55,7 @@ export const FormularioTipoProducto = ({
             type="text"
             placeholder="Ingresa el nombre..."
             {...register('nombre')}
-            className={`input input-sm input-bordered bg-transparent ${
+            className={`input input-sm input-bordered bg-transparent placeholder-gray-500 ${
               errors.nombre ? 'input-error' : 'input-success'
             }`}
           />

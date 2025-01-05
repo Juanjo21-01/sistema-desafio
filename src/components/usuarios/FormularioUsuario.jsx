@@ -55,7 +55,10 @@ export const FormularioUsuario = ({ usuario, onGuardar, onClose }) => {
       <div className="flex flex-col md:flex-row justify-between gap-4 mb-2">
         {/* Nombres */}
         <div className="form-control w-full text-gray-700">
-          <label htmlFor="nombres" className="label label-text text-gray-700">
+          <label
+            htmlFor="nombres"
+            className="label label-text font-semibold text-gray-700"
+          >
             Nombres
           </label>
           <input
@@ -63,7 +66,7 @@ export const FormularioUsuario = ({ usuario, onGuardar, onClose }) => {
             type="text"
             placeholder="Ingresa los nombres..."
             {...register('nombres')}
-            className={`input input-sm input-bordered bg-transparent ${
+            className={`input input-sm input-bordered bg-transparent placeholder-gray-500 ${
               errors.nombres ? 'input-error' : 'input-success'
             }`}
           />
@@ -76,7 +79,10 @@ export const FormularioUsuario = ({ usuario, onGuardar, onClose }) => {
 
         {/* Apellidos */}
         <div className="form-control w-full text-gray-700">
-          <label htmlFor="apellidos" className="label label-text text-gray-700">
+          <label
+            htmlFor="apellidos"
+            className="label label-text font-semibold text-gray-700"
+          >
             Apellidos
           </label>
           <input
@@ -84,7 +90,7 @@ export const FormularioUsuario = ({ usuario, onGuardar, onClose }) => {
             type="text"
             placeholder="Ingresa los apellidos..."
             {...register('apellidos')}
-            className={`input input-sm input-bordered bg-transparent ${
+            className={`input input-sm input-bordered bg-transparent placeholder-gray-500 ${
               errors.apellidos ? 'input-error' : 'input-success'
             }`}
           />
@@ -99,7 +105,10 @@ export const FormularioUsuario = ({ usuario, onGuardar, onClose }) => {
       <div className="flex flex-col md:flex-row justify-between gap-4 mb-2">
         {/* Email */}
         <div className="form-control w-full text-gray-700">
-          <label htmlFor="email" className="label label-text text-gray-700">
+          <label
+            htmlFor="email"
+            className="label label-text font-semibold text-gray-700"
+          >
             Correo Electrónico
           </label>
           <input
@@ -107,7 +116,7 @@ export const FormularioUsuario = ({ usuario, onGuardar, onClose }) => {
             type="email"
             placeholder="ejemplo@gmail.com"
             {...register('email')}
-            className={`input input-sm input-bordered bg-transparent ${
+            className={`input input-sm input-bordered bg-transparent placeholder-gray-500 ${
               errors.email ? 'input-error' : 'input-success'
             }`}
           />
@@ -120,7 +129,10 @@ export const FormularioUsuario = ({ usuario, onGuardar, onClose }) => {
 
         {/* Contraseña */}
         <div className="form-control w-full text-gray-700">
-          <label htmlFor="password" className="label label-text text-gray-700">
+          <label
+            htmlFor="password"
+            className="label label-text font-semibold text-gray-700"
+          >
             Contraseña
           </label>
           <input
@@ -128,7 +140,7 @@ export const FormularioUsuario = ({ usuario, onGuardar, onClose }) => {
             type="password"
             placeholder="********"
             {...register('password')}
-            className={`input input-sm input-bordered bg-transparent ${
+            className={`input input-sm input-bordered bg-transparent placeholder-gray-500 ${
               errors.password ? 'input-error' : 'input-success'
             }`}
           />
@@ -143,7 +155,10 @@ export const FormularioUsuario = ({ usuario, onGuardar, onClose }) => {
       <div className="flex flex-col md:flex-row justify-between gap-4 mb-2">
         {/* Dirección */}
         <div className="form-control w-full text-gray-700">
-          <label htmlFor="direccion" className="label label-text text-gray-700">
+          <label
+            htmlFor="direccion"
+            className="label label-text font-semibold text-gray-700"
+          >
             Dirección
           </label>
           <input
@@ -151,7 +166,7 @@ export const FormularioUsuario = ({ usuario, onGuardar, onClose }) => {
             type="text"
             placeholder="Ingresa la dirección..."
             {...register('direccion')}
-            className={`input input-sm input-bordered bg-transparent ${
+            className={`input input-sm input-bordered bg-transparent placeholder-gray-500 ${
               errors.direccion ? 'input-error' : 'input-success'
             }`}
           />
@@ -164,7 +179,10 @@ export const FormularioUsuario = ({ usuario, onGuardar, onClose }) => {
 
         {/* Teléfono */}
         <div className="form-control w-full text-gray-700">
-          <label htmlFor="telefono" className="label label-text text-gray-700">
+          <label
+            htmlFor="telefono"
+            className="label label-text font-semibold text-gray-700"
+          >
             Teléfono
           </label>
           <input
@@ -172,7 +190,7 @@ export const FormularioUsuario = ({ usuario, onGuardar, onClose }) => {
             type="text"
             placeholder="Ingresa el teléfono..."
             {...register('telefono')}
-            className={`input input-sm input-bordered bg-transparent ${
+            className={`input input-sm input-bordered bg-transparent placeholder-gray-500 ${
               errors.telefono ? 'input-error' : 'input-success'
             }`}
           />
@@ -189,7 +207,7 @@ export const FormularioUsuario = ({ usuario, onGuardar, onClose }) => {
         <div className="form-control w-full text-gray-700">
           <label
             htmlFor="fecha_nacimiento"
-            className="label label-text text-gray-700"
+            className="label label-text font-semibold text-gray-700"
           >
             Fecha de Nacimiento
           </label>
@@ -197,7 +215,7 @@ export const FormularioUsuario = ({ usuario, onGuardar, onClose }) => {
             id="fecha_nacimiento"
             type="date"
             {...register('fecha_nacimiento')}
-            className={`input input-sm input-bordered bg-transparent ${
+            className={`input input-sm input-bordered bg-transparent text-gray-500 ${
               errors.fecha_nacimiento ? 'input-error' : 'input-success'
             }`}
           />
@@ -210,17 +228,20 @@ export const FormularioUsuario = ({ usuario, onGuardar, onClose }) => {
 
         {/* Rol */}
         <div className="form-control w-full text-gray-700">
-          <label htmlFor="rol_id" className="label label-text text-gray-700">
+          <label
+            htmlFor="rol_id"
+            className="label label-text font-semibold text-gray-700"
+          >
             Rol
           </label>
           <select
             id="rol_id"
             {...register('rol_id')}
-            className={`select select-sm select-bordered bg-transparent ${
+            className={`select select-sm select-bordered bg-transparent text-gray-500 ${
               errors.rol_id ? 'select-error' : 'select-success'
             }`}
           >
-            <option value="0" disabled>
+            <option value="" disabled>
               Selecciona un rol
             </option>
             <option value="2">Empleado</option>

@@ -49,7 +49,10 @@ export const FormularioProveedor = ({ proveedor, onGuardar, onClose }) => {
       <div className="flex flex-col md:flex-row justify-between gap-4 mb-2">
         {/* Nombre */}
         <div className="form-control w-full text-gray-700">
-          <label htmlFor="nombre" className="label label-text text-gray-700">
+          <label
+            htmlFor="nombre"
+            className="label label-text font-semibold text-gray-700"
+          >
             Nombre
           </label>
           <input
@@ -57,7 +60,7 @@ export const FormularioProveedor = ({ proveedor, onGuardar, onClose }) => {
             type="text"
             placeholder="Ingresa el nombre..."
             {...register('nombre')}
-            className={`input input-sm input-bordered bg-transparent ${
+            className={`input input-sm input-bordered bg-transparent placeholder-gray-500 ${
               errors.nombre ? 'input-error' : 'input-success'
             }`}
           />
@@ -70,7 +73,10 @@ export const FormularioProveedor = ({ proveedor, onGuardar, onClose }) => {
 
         {/* Dirección */}
         <div className="form-control w-full text-gray-700">
-          <label htmlFor="direccion" className="label label-text text-gray-700">
+          <label
+            htmlFor="direccion"
+            className="label label-text font-semibold text-gray-700"
+          >
             Dirección
           </label>
           <input
@@ -78,7 +84,7 @@ export const FormularioProveedor = ({ proveedor, onGuardar, onClose }) => {
             type="text"
             placeholder="Ingresa la dirección..."
             {...register('direccion')}
-            className={`input input-sm input-bordered bg-transparent ${
+            className={`input input-sm input-bordered bg-transparent placeholder-gray-500 ${
               errors.direccion ? 'input-error' : 'input-success'
             }`}
           />
@@ -93,7 +99,10 @@ export const FormularioProveedor = ({ proveedor, onGuardar, onClose }) => {
       <div className="flex flex-col md:flex-row justify-between gap-4 mb-2">
         {/* NIT */}
         <div className="form-control w-full text-gray-700">
-          <label htmlFor="nit" className="label label-text text-gray-700">
+          <label
+            htmlFor="nit"
+            className="label label-text font-semibold text-gray-700"
+          >
             NIT
           </label>
           <input
@@ -101,7 +110,7 @@ export const FormularioProveedor = ({ proveedor, onGuardar, onClose }) => {
             type="text"
             placeholder="Ingresa el NIT..."
             {...register('nit')}
-            className={`input input-sm input-bordered bg-transparent ${
+            className={`input input-sm input-bordered bg-transparent placeholder-gray-500 ${
               errors.nit ? 'input-error' : 'input-success'
             }`}
           />
@@ -114,7 +123,10 @@ export const FormularioProveedor = ({ proveedor, onGuardar, onClose }) => {
 
         {/* Teléfono */}
         <div className="form-control w-full text-gray-700">
-          <label htmlFor="telefono" className="label label-text text-gray-700">
+          <label
+            htmlFor="telefono"
+            className="label label-text font-semibold text-gray-700"
+          >
             Teléfono
           </label>
           <input
@@ -122,7 +134,7 @@ export const FormularioProveedor = ({ proveedor, onGuardar, onClose }) => {
             type="text"
             placeholder="Ingresa el teléfono..."
             {...register('telefono')}
-            className={`input input-sm input-bordered bg-transparent ${
+            className={`input input-sm input-bordered bg-transparent placeholder-gray-500 ${
               errors.telefono ? 'input-error' : 'input-success'
             }`}
           />
