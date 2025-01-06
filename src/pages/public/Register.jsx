@@ -1,5 +1,6 @@
 import { NavLink } from 'react-router';
 import { Register } from '../../components/auth/Register';
+import { Toaster } from 'sonner';
 
 function Registrarse() {
   return (
@@ -32,6 +33,9 @@ function Registrarse() {
           </section>
         </div>
       </div>
+
+      {/* Notificaciones */}
+      <Toaster visibleToasts={3} position="bottom-right" theme="system" />
     </div>
   );
 }

@@ -2,10 +2,10 @@ import { Outlet } from 'react-router';
 import { Navegacion } from '../../components/navegacion/Navegacion';
 import { Header } from '../../components/navegacion/Header';
 import { useAuthStore } from '../../store/authStore';
+import { Toaster } from 'sonner';
 
 const Layout = () => {
-  // const rol = useAuthStore((state) => state.profile.rol);
-  const rol = 1;
+  const rol = useAuthStore((state) => state.profile.rol_id);
 
   return (
     <div className="min-h-screen">
@@ -28,6 +28,9 @@ const Layout = () => {
             </div>
           </main>
         </div>
+
+        {/* Notificaciones */}
+        <Toaster visibleToasts={3} position="bottom-right" theme="system" />
       </div>
     </div>
   );

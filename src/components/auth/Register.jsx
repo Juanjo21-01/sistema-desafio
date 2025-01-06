@@ -1,6 +1,9 @@
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { registerValidation } from '../../validations/registerValidation';
+import { registrar } from '../../helpers/api/auth';
+import { toast } from 'sonner';
+import { useNavigate } from 'react-router';
 
 export const Register = () => {
   // Variables de react-hook-form
@@ -12,9 +15,23 @@ export const Register = () => {
     resolver: yupResolver(registerValidation),
   });
 
+  const navigate = useNavigate();
+
   // Enviar formulario
-  const onSubmit = (data) => {
-    console.log(data);
+  const onSubmit = async (data) => {
+    try {
+      const response = await registrar(data);
+
+      if (!response) return;
+
+      setTimeout(() => {
+        toast.success('¡Te has registrado correctamente!');
+      }, 2000);
+
+      navigate('/');
+    } catch (error) {
+      console.error('Error en la autenticación:', error);
+    }
   };
 
   return (

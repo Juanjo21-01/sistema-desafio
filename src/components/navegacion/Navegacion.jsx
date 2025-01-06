@@ -15,8 +15,6 @@ import {
 export const Navegacion = () => {
   // Usuario
   const usuario = useAuthStore((state) => state.profile);
-  const nombre = 'Juan José';
-  const rol = 1;
 
   return (
     <aside className="bg-base-200 sm:w-40 md:w-56 lg:w-72 shadow-xl hidden sm:block">
@@ -31,9 +29,9 @@ export const Navegacion = () => {
               <FaUserCircle className="w-6 h-6 text-primary" />
             </div>
             <div>
-              <h3 className="font-bold">{nombre}</h3>
+              <h3 className="font-bold">{usuario.nombres}</h3>
               <p className="text-sm text-gray-600">
-                {rol == 1 ? 'Administrador' : 'Cliente'}
+                {usuario.rol_id == 1 ? 'Administrador' : 'Cliente'}
               </p>
             </div>
           </div>
@@ -59,7 +57,7 @@ export const Navegacion = () => {
             </li>
           </ul>
 
-          {rol <= 2 && (
+          {usuario.rol_id <= 2 && (
             <>
               <div className="divider my-4 text-sm font-medium">
                 ADMINISTRACIÓN

@@ -3,6 +3,8 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { loginValidation } from '../../validations/loginValidation';
 import { IoIosMail } from 'react-icons/io';
 import { FaKey } from 'react-icons/fa';
+import { login } from '../../helpers/api/auth';
+import { useAuthStore } from '../../store/authStore';
 
 export const Login = () => {
   // Variables de react-hook-form
@@ -14,9 +16,21 @@ export const Login = () => {
     resolver: yupResolver(loginValidation),
   });
 
+  const setToken = useAuthStore((state) => state.setToken);
+  const setProfile = useAuthStore((state) => state.setProfile);
+
   // Enviar formulario
-  const onSubmit = (data) => {
-    console.log(data);
+  const onSubmit = async (data) => {
+    try {
+      const response = await login(data);
+
+      if (!response) return;
+
+      setToken(response.access_token);
+      setProfile(response.usuario);
+    } catch (error) {
+      console.error('Error en la autenticación:', error);
+    }
   };
 
   return (

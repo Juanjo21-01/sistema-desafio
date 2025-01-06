@@ -6,7 +6,12 @@ import { FaShoppingBag, FaSignOutAlt } from 'react-icons/fa';
 export const Header = () => {
   // Usuario
   const usuario = useAuthStore((state) => state.profile);
-  const rol = 1;
+  const logout = useAuthStore((state) => state.logout);
+
+  // Cerrar Sesión
+  const cerrarSesion = () => {
+    logout();
+  };
 
   return (
     <header className="sticky top-0 z-50 navbar bg-gradient-to-r from-red-300 via-yellow-300 to-green-300 px-4 py-2 shadow-lg">
@@ -31,7 +36,7 @@ export const Header = () => {
 
       <div className="flex-none gap-6">
         {/* Carrito */}
-        {rol == 3 && (
+        {usuario.rol_id == 3 && (
           <div className="dropdown dropdown-end">
             <button
               tabIndex={0}
@@ -101,7 +106,7 @@ export const Header = () => {
                 </div>
               </div>
               <span className="hidden md:block font-semibold text-white">
-                Juan José
+                {usuario.nombres}
               </span>
             </div>
           </button>
@@ -111,8 +116,10 @@ export const Header = () => {
             className="menu dropdown-content mt-3 z-[1] p-2 shadow-xl bg-base-200 rounded-box w-60"
           >
             <div className="px-4 py-3 border-b">
-              <p className="font-bold">Juan José</p>
-              <p className="text-sm text-gray-600">usuario@email.com</p>
+              <p className="font-bold">
+                {usuario.nombres} {usuario.apellidos}
+              </p>
+              <p className="text-sm text-gray-600">{usuario.email}</p>
             </div>
             <li>
               <NavLink to="/perfil" className="flex items-center gap-2 mt-2">
@@ -120,7 +127,7 @@ export const Header = () => {
                 Mi Perfil
               </NavLink>
             </li>
-            {rol == 3 && (
+            {usuario.rol_id == 3 && (
               <li>
                 <NavLink
                   to="/perfil/pedidos"
@@ -133,7 +140,10 @@ export const Header = () => {
             )}
             <div className="divider my-1"></div>
             <li>
-              <button className="flex items-center gap-2 text-error hover:bg-error/10">
+              <button
+                className="flex items-center gap-2 text-error hover:bg-error/10"
+                onClick={cerrarSesion}
+              >
                 <FaSignOutAlt />
                 Cerrar Sesión
               </button>

@@ -1,5 +1,6 @@
 import { NavLink } from 'react-router';
 import { Login } from '../../components/auth/Login';
+import { Toaster } from 'sonner';
 
 function InicioSesion() {
   return (
@@ -32,6 +33,9 @@ function InicioSesion() {
           </section>
         </div>
       </div>
+
+      {/* Notificaciones */}
+      <Toaster visibleToasts={3} position="bottom-right" theme="system" />
     </div>
   );
 }

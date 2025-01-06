@@ -4,7 +4,7 @@ import api from '../libs/axios';
 // Manejo de errores
 const handleError = (error) => {
   if (error.response) {
-    toast.error(error.response.data.message);
+    toast.error(error.response.data.mensaje);
   } else {
     toast.error('Error de conexión, intente más tarde');
   }
@@ -28,7 +28,7 @@ export const login = async ({ email, password }) => {
 };
 
 // 2. POST - Registrar cliente
-export const register = async (data) => {
+export const registrar = async (data) => {
   try {
     const cliente = {
       nombres: data.nombres,
