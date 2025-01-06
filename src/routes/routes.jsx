@@ -26,7 +26,6 @@ import Carrito from '../pages/private/Carrito';
 import CheckOut from '../pages/private/CheckOut';
 import PerfilInicio from '../pages/private/perfil/PerfilInicio';
 import PerfilPedidos from '../pages/private/perfil/PerfilPedidos';
-import PerfilPedido from '../pages/private/perfil/PerfilPedido';
 
 const Rutas = () => {
   return (
@@ -124,7 +123,6 @@ const Rutas = () => {
             >
               <Route index element={<PerfilInicio />} />
               <Route path="pedidos" element={<PerfilPedidos />} />
-              <Route path="pedidos/:id" element={<PerfilPedido />} />
             </Route>
           </Route>
         </Route>
