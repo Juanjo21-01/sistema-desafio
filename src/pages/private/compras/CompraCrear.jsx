@@ -1,37 +1,29 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useNavigate } from 'react-router';
 import { FormularioCompra } from '../../../components/compras/FormularioCompra';
+import { useProveedoresStore } from '../../../store/proveedoresStore';
+import { useProductosStore } from '../../../store/productosStore';
+import { registerCompra } from '../../../helpers/api/compras';
 
 function CompraCrear() {
-  // Variables de estado
-  const [proveedores, setProveedores] = useState([]);
-  const [productos, setProductos] = useState([]);
-
   const navigate = useNavigate();
 
+  // Store de proveedores
+  const { proveedores, obtener: obtenerProveedores } = useProveedoresStore();
+  // Store de productos
+  const { productos, obtener: obtenerProductos } = useProductosStore();
+
+  // Obtener proveedores y productos
+  useEffect(() => {
+    obtenerProveedores();
+    obtenerProductos();
+  }, [obtenerProveedores, obtenerProductos]);
+
   // Guardar la compra
-  const onGuardar = (data) => {
-    console.log('Datos enviados:', data);
+  const onGuardar = async (data) => {
+    await registerCompra(data);
     navigate('/compras');
   };
-
-  useEffect(() => {
-    const cargarDatos = async () => {
-      const proveedoresSimulados = [
-        { id: '1', nombre: 'Proveedor A' },
-        { id: '2', nombre: 'Proveedor B' },
-      ];
-      const productosSimulados = [
-        { id: '1', nombre: 'Producto A' },
-        { id: '2', nombre: 'Producto B' },
-        { id: '3', nombre: 'Producto C' },
-      ];
-      setProveedores(proveedoresSimulados);
-      setProductos(productosSimulados);
-    };
-
-    cargarDatos();
-  }, []);
 
   return (
     <div className="px-4 py-2">

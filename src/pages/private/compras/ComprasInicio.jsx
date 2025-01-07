@@ -1,28 +1,23 @@
 import { NavLink } from 'react-router';
+import { Loader } from '../../../components/Loader';
 import { TablaCompras } from '../../../components/compras/TablaCompras';
+import { useComprasStore } from '../../../store/comprasStore';
+import { cambiarEstadoCompra } from '../../../helpers/api/compras';
+import { useEffect } from 'react';
 
 function ComprasInicio() {
   // Store de compras
-  const compras = [
-    {
-      id: 1,
-      fecha_compra: '2021-09-01',
-      proveedor_id: 'Juan José',
-      cantidad_productos: 3,
-      estado: 'Activo',
-    },
-    {
-      id: 2,
-      fecha_compra: '2021-09-02',
-      proveedor_id: 'María Fernanda',
-      cantidad_productos: 1,
-      estado: 'Inactivo',
-    },
-  ];
+  const { compras, obtener, isLoading } = useComprasStore();
+
+  // Obtener compras
+  useEffect(() => {
+    obtener();
+  }, [obtener]);
 
   // Cambiar estado de compra
-  const cambiarEstado = (compra) => {
-    console.log('Cambiar estado: ', compra);
+  const cambiarEstado = async (compra) => {
+    await cambiarEstadoCompra(compra.id, { estado: !compra.estado });
+    obtener();
   };
 
   return (
@@ -38,7 +33,11 @@ function ComprasInicio() {
       </div>
 
       {/* Tabla */}
-      <TablaCompras compras={compras} onEstado={cambiarEstado} />
+      {isLoading ? (
+        <Loader />
+      ) : (
+        <TablaCompras compras={compras} onEstado={cambiarEstado} />
+      )}
     </div>
   );
 }

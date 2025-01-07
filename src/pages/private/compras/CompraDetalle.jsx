@@ -1,23 +1,22 @@
+import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router';
 import { FaCalendar, FaTruck, FaBoxes, FaDollarSign } from 'react-icons/fa';
+import { getCompraById } from '../../../helpers/api/compras';
+import { Loader } from '../../../components/Loader';
 
 function CompraDetalle() {
-  const navigate = useNavigate();
-  const { id } = useParams();
+  // Variables de estado
+  const [compra, setCompra] = useState(null);
 
-  const compra = {
-    id: 1,
-    fecha_compra: '2024-03-15',
-    proveedor: 'Proveedor A',
-    observaciones: 'Compra mensual de productos',
-    usuario: 'Usuario A',
-    estado: true,
-    detalles: [
-      { id: 1, producto: 'Producto A', cantidad: 5, precio_unitario: 100 },
-      { id: 2, producto: 'Producto B', cantidad: 3, precio_unitario: 150 },
-      { id: 3, producto: 'Producto C', cantidad: 2, precio_unitario: 200 },
-    ],
-  };
+  const { id } = useParams();
+  const navigate = useNavigate();
+
+  // Compra
+  useEffect(() => {
+    getCompraById(id).then((data) => setCompra(data));
+  }, [id]);
+
+  if (!compra) return <Loader />;
 
   return (
     <div className="px-4 py-2">
@@ -40,7 +39,7 @@ function CompraDetalle() {
             <h2 className="card-title">
               Encargado:{' '}
               <span className="font-semibold text-primary">
-                {compra.usuario}
+                {compra.usuario_id.nombres}
               </span>
             </h2>
           </div>
@@ -57,7 +56,7 @@ function CompraDetalle() {
               <FaTruck className="text-primary text-xl" />
               <div>
                 <p className="text-sm text-gray-500">Proveedor</p>
-                <p className="font-semibold">{compra.proveedor}</p>
+                <p className="font-semibold">{compra.proveedor_id.nombre}</p>
               </div>
             </div>
 
@@ -119,7 +118,7 @@ function CompraDetalle() {
               <tbody className="divide-y dark:divide-gray-700 text-center">
                 {compra.detalles.map((detalle) => (
                   <tr key={detalle.id}>
-                    <td>{detalle.producto}</td>
+                    <td>{detalle.producto_id.nombre}</td>
                     <td>{detalle.cantidad}</td>
                     <td>Q{detalle.precio_unitario.toFixed(2)}</td>
                     <td>

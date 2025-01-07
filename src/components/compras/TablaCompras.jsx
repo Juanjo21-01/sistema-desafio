@@ -10,7 +10,7 @@ export const TablaCompras = ({ compras, onEstado }) => {
             <th className="w-1/12">No.</th>
             <th className="w-2/12">Fecha</th>
             <th className="w-3/12">Proveedor</th>
-            <th className="w-2/12">Cantidad</th>
+            <th className="w-2/12">Encargado</th>
             <th className="w-1/12">Estado</th>
             <th className="w-3/12">Acciones</th>
           </tr>
@@ -28,18 +28,18 @@ export const TablaCompras = ({ compras, onEstado }) => {
             <tr key={compra.id}>
               <td className="font-semibold">{compra.id}</td>
               <td>{compra.fecha_compra}</td>
-              <td>{compra.proveedor_id}</td>
-              <td>{compra.cantidad_productos}</td>
+              <td>{compra.proveedor_id.nombre}</td>
+              <td>{compra.usuario_id.nombres}</td>
               <td>
                 <button
                   onClick={() => onEstado(compra)}
                   className={`btn btn-xs font-semibold leading-tight ${
-                    compra.estado === 'Activo'
+                    compra.estado
                       ? 'btn-success text-green-700 dark:text-green-100'
                       : 'btn-error text-red-700 dark:text-red-100'
                   }`}
                 >
-                  {compra.estado}
+                  {compra.estado ? 'Activo' : 'Inactivo'}
                 </button>
               </td>
               <td>

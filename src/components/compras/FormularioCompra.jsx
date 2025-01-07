@@ -3,6 +3,7 @@ import { useForm, useFieldArray } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { compraValidation } from '../../validations/compraValidation';
 import { NavLink } from 'react-router';
+import { useAuthStore } from '../../store/authStore';
 
 export const FormularioCompra = ({ proveedores, productos, onGuardar }) => {
   // Validación con react-hook-form y yup
@@ -40,8 +41,16 @@ export const FormularioCompra = ({ proveedores, productos, onGuardar }) => {
     document.getElementById('precio_unitario').value = '';
   };
 
+  // Usuario autenticado
+  const { profile } = useAuthStore();
+
   // Enviar el formulario
-  const onSubmit = (data) => onGuardar(data);
+  const onSubmit = (data) => {
+    // Agregar el id del usuario autenticado
+    data.usuario_id = profile.id;
+
+    onGuardar(data);
+  };
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
@@ -123,7 +132,7 @@ export const FormularioCompra = ({ proveedores, productos, onGuardar }) => {
                       <td>
                         {
                           productos.find(
-                            (prod) => prod.id === detalle.producto_id
+                            (prod) => prod.id == detalle.producto_id
                           )?.nombre
                         }
                       </td>
