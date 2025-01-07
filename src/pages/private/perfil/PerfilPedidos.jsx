@@ -1,25 +1,20 @@
-import { useState } from 'react';
-import { FaCalendar, FaShoppingCart, FaClock } from 'react-icons/fa';
+import { useEffect, useState } from 'react';
 import { NavLink } from 'react-router';
+import { FaCalendar, FaShoppingCart, FaClock } from 'react-icons/fa';
+import { getOrdenesByCliente } from '../../../helpers/api/ordenes';
+import { useAuthStore } from '../../../store/authStore';
 
 function PerfilPedidos() {
-  const [pedidos] = useState([
-    {
-      id: 1,
-      fecha_orden: '2024-03-15',
-      estado: 'V',
-      detalle: [
-        { id: 1, nombre: 'Producto A', cantidad: 2, precio: 100 },
-        { id: 2, nombre: 'Producto B', cantidad: 1, precio: 150 },
-      ],
-    },
-    {
-      id: 2,
-      fecha_orden: '2024-03-14',
-      estado: 'P',
-      detalle: [{ id: 3, nombre: 'Producto C', cantidad: 3, precio: 75 }],
-    },
-  ]);
+  // Variables de estado
+  const [pedidos, setPedidos] = useState([]);
+
+  // Usuario autenticado
+  const { profile } = useAuthStore();
+
+  // Obtener pedidos del cliente
+  useEffect(() => {
+    getOrdenesByCliente(profile.id).then((data) => setPedidos(data));
+  }, [profile.id]);
 
   return (
     <div className="px-4 py-0">
@@ -96,7 +91,10 @@ function PerfilPedidos() {
                         </p>
                       </div>
                       <p className="font-semibold">
-                        Q{(producto.cantidad * producto.precio).toFixed(2)}
+                        Q
+                        {(producto.cantidad * producto.precio_unitario).toFixed(
+                          2
+                        )}
                       </p>
                     </div>
                   ))}
@@ -111,7 +109,10 @@ function PerfilPedidos() {
                 <span className="text-xl font-bold text-primary">
                   Q
                   {pedido.detalle
-                    .reduce((sum, item) => sum + item.cantidad * item.precio, 0)
+                    .reduce(
+                      (sum, item) => sum + item.cantidad * item.precio_unitario,
+                      0
+                    )
                     .toFixed(2)}
                 </span>
               </div>

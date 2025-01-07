@@ -7,18 +7,11 @@ import {
   FaBirthdayCake,
   FaShoppingBag,
 } from 'react-icons/fa';
+import { useAuthStore } from '../../../store/authStore';
 
 function PerfilInicio() {
-  const usuario = {
-    nombres: 'Juan José',
-    apellidos: 'Pérez González',
-    email: 'juan@example.com',
-    telefono: '12345678',
-    direccion: 'Ciudad de Guatemala, Guatemala',
-    fecha_nacimiento: '1990-01-01',
-    pedidos_count: 5,
-    ultimo_pedido: '2024-03-15',
-  };
+  // Usuario autenticado
+  const { profile } = useAuthStore();
 
   return (
     <div className="px-4 py-2 space-y-4">
@@ -38,7 +31,7 @@ function PerfilInicio() {
             {/* Información Personal */}
             <div className="flex-1">
               <h2 className="text-3xl font-bold mb-6">
-                {usuario.nombres} {usuario.apellidos}
+                {profile.nombres} {profile.apellidos}
               </h2>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -46,7 +39,7 @@ function PerfilInicio() {
                   <FaEnvelope className="text-primary text-xl" />
                   <div>
                     <p className="text-sm text-gray-500">Email</p>
-                    <p className="font-medium">{usuario.email}</p>
+                    <p className="font-medium">{profile.email}</p>
                   </div>
                 </div>
 
@@ -54,7 +47,7 @@ function PerfilInicio() {
                   <FaPhone className="text-primary text-xl" />
                   <div>
                     <p className="text-sm text-gray-500">Teléfono</p>
-                    <p className="font-medium">{usuario.telefono}</p>
+                    <p className="font-medium">{profile.telefono}</p>
                   </div>
                 </div>
 
@@ -62,7 +55,7 @@ function PerfilInicio() {
                   <FaMapMarkerAlt className="text-primary text-xl" />
                   <div>
                     <p className="text-sm text-gray-500">Dirección</p>
-                    <p className="font-medium">{usuario.direccion}</p>
+                    <p className="font-medium">{profile.direccion}</p>
                   </div>
                 </div>
 
@@ -70,7 +63,7 @@ function PerfilInicio() {
                   <FaBirthdayCake className="text-primary text-xl" />
                   <div>
                     <p className="text-sm text-gray-500">Fecha de Nacimiento</p>
-                    <p className="font-medium">{usuario.fecha_nacimiento}</p>
+                    <p className="font-medium">{profile.fecha_nacimiento}</p>
                   </div>
                 </div>
               </div>
@@ -99,7 +92,7 @@ function PerfilInicio() {
             <div className="stat text-center">
               <div className="stat-title">Total Pedidos</div>
               <div className="stat-value text-2xl md:text-3xl">
-                {usuario.pedidos_count}
+                {profile.pedidos ? profile.pedidos : '2'}
               </div>
               <div className="stat-desc">Histórico de compras</div>
             </div>
@@ -107,7 +100,7 @@ function PerfilInicio() {
             <div className="stat text-center">
               <div className="stat-title">Último Pedido</div>
               <div className="stat-value text-primary text-2xl md:text-3xl">
-                {usuario.ultimo_pedido}
+                {profile.ultimo_pedido ? profile.ultimo_pedido : '2025-01-05'}
               </div>
               <div className="stat-desc">Fecha de compra</div>
             </div>

@@ -36,7 +36,19 @@ export const getOrdenById = async (id) => {
   }
 };
 
-// 3. POST - Registrar orden
+// 3. GET - Obtener ordenes por cliente
+export const getOrdenesByCliente = async (id) => {
+  try {
+    // Petición
+    const response = await api.get(`ordenes/cliente/${id}`);
+
+    return response.data;
+  } catch (error) {
+    handleError(error);
+  }
+};
+
+// 4. POST - Registrar orden
 export const registerOrden = async (data) => {
   try {
     const orden = {
@@ -55,7 +67,7 @@ export const registerOrden = async (data) => {
   }
 };
 
-// 4. POST - Registrar responsable de orden
+// 5. POST - Registrar responsable de orden
 export const registerResponsableOrden = async (data) => {
   try {
     const responsable = {
@@ -76,7 +88,7 @@ export const registerResponsableOrden = async (data) => {
   }
 };
 
-// 5. PATCH - Cambiar estado de orden
+// 6. PATCH - Cambiar estado de orden
 export const cambiarEstadoOrden = async (id, { estado }) => {
   try {
     // Petición
