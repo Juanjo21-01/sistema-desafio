@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router';
 import {
   FaCalendar,
@@ -5,28 +6,22 @@ import {
   FaDollarSign,
   FaShoppingCart,
 } from 'react-icons/fa';
+import { getOrdenById } from '../../../helpers/api/ordenes';
+import { Loader } from '../../../components/Loader';
 
 function OrdenDetalle() {
-  const navigate = useNavigate();
-  const { id } = useParams();
+  // Variables de estado
+  const [orden, setOrden] = useState(null);
 
-  const orden = {
-    id: 1,
-    fecha_orden: '2024-03-15',
-    cliente_id: 'Juan Pérez',
-    cantidad_productos: 3,
-    estado: 'V',
-    detalle: [
-      { id: 1, nombre: 'Producto A', cantidad: 2, precio_unitario: 100 },
-      { id: 2, nombre: 'Producto B', cantidad: 1, precio_unitario: 150 },
-      { id: 3, nombre: 'Producto C', cantidad: 3, precio_unitario: 75 },
-    ],
-    responsableOrden: {
-      orden_id: 1,
-      usuario: 'Usuario A',
-      observaciones: 'Orden de productos para el mes',
-    },
-  };
+  const { id } = useParams();
+  const navigate = useNavigate();
+
+  // Orden
+  useEffect(() => {
+    getOrdenById(id).then((data) => setOrden(data));
+  }, [id]);
+
+  if (!orden) return <Loader />;
 
   return (
     <div className="px-4 py-2">
@@ -49,7 +44,7 @@ function OrdenDetalle() {
             <h2 className="card-title">
               Responsable de Orden:{' '}
               <span className="font-semibold text-primary">
-                {orden.responsableOrden.usuario || 'N/A'}
+                {orden.encargado.encargado_id.nombres || 'N/A'}
               </span>
             </h2>
           </div>
@@ -66,7 +61,7 @@ function OrdenDetalle() {
               <FaUser className="text-primary text-xl" />
               <div>
                 <p className="text-sm text-gray-500">Cliente</p>
-                <p className="font-semibold">{orden.cliente_id}</p>
+                <p className="font-semibold">{orden.cliente_id.nombres}</p>
               </div>
             </div>
 
@@ -93,7 +88,7 @@ function OrdenDetalle() {
             <div className="w-full">
               <p className="text-sm text-gray-500 mb-1">Observaciones</p>
               <p className="bg-base-100 p-3 rounded-lg">
-                {orden.responsableOrden.observaciones}
+                {orden.encargado.observaciones}
               </p>
             </div>
             <div className="w-full flex justify-end items-center gap-4">
@@ -136,7 +131,7 @@ function OrdenDetalle() {
               <tbody className="divide-y dark:divide-gray-700 text-center">
                 {orden.detalle.map((item) => (
                   <tr key={item.id}>
-                    <td>{item.nombre}</td>
+                    <td>{item.producto_id.nombre}</td>
                     <td>{item.cantidad}</td>
                     <td>Q{item.precio_unitario.toFixed(2)}</td>
                     <td>

@@ -55,7 +55,7 @@ export const TarjetasOrdenesPendientes = ({
                   <FaUser className="text-primary" />
                   <div>
                     <p className="text-sm text-gray-500">Cliente</p>
-                    <p className="font-medium">{orden.cliente_id}</p>
+                    <p className="font-medium">{orden.cliente_id.nombres}</p>
                   </div>
                 </div>
               </div>
@@ -75,13 +75,20 @@ export const TarjetasOrdenesPendientes = ({
                       className="flex justify-between items-center py-1 border-b last:border-0 border-base-300 text-center"
                     >
                       <div className="flex-1">
-                        <p className="font-medium">{producto.nombre}</p>
+                        <p className="font-medium">
+                          {producto.producto_id.nombre}
+                        </p>
                         <p className="text-sm text-gray-500">
-                          {producto.cantidad} unidades
+                          {producto.cantidad == 1
+                            ? '1 unidad'
+                            : `${producto.cantidad} unidades`}
                         </p>
                       </div>
                       <p className="font-semibold">
-                        Q{(producto.cantidad * producto.precio).toFixed(2)}
+                        Q
+                        {(producto.cantidad * producto.precio_unitario).toFixed(
+                          2
+                        )}
                       </p>
                     </div>
                   ))}
@@ -94,7 +101,10 @@ export const TarjetasOrdenesPendientes = ({
                 <span className="text-lg font-bold text-primary">
                   Q
                   {orden.detalle
-                    .reduce((sum, prod) => sum + prod.cantidad * prod.precio, 0)
+                    .reduce(
+                      (sum, prod) => sum + prod.cantidad * prod.precio_unitario,
+                      0
+                    )
                     .toFixed(2)}
                 </span>
               </div>

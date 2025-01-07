@@ -9,9 +9,8 @@ export const TablaOrdenes = ({ ordenes, onEstado }) => {
           <tr className="text-xs font-semibold tracking-widest text-center text-gray-500 uppercase border-b-2  dark:border-gray-700 bg-gray-50 dark:text-gray-400 dark:bg-gray-800">
             <th className="w-1/12">No.</th>
             <th className="w-2/12">Fecha</th>
-            <th className="w-3/12">Cliente</th>
-            <th className="w-2/12">Cantidad</th>
-            <th className="w-1/12">Estado</th>
+            <th className="w-4/12">Cliente</th>
+            <th className="w-2/12">Estado</th>
             <th className="w-3/12">Acciones</th>
           </tr>
         </thead>
@@ -28,8 +27,7 @@ export const TablaOrdenes = ({ ordenes, onEstado }) => {
             <tr key={orden.id}>
               <td className="font-semibold">{orden.id}</td>
               <td>{orden.fecha_orden}</td>
-              <td>{orden.cliente_id}</td>
-              <td>{orden.cantidad_productos}</td>
+              <td>{orden.cliente_id.nombres}</td>
               <td>
                 <span
                   className={`badge badge-md font-bold text-white ${

@@ -1,28 +1,26 @@
 import { NavLink } from 'react-router';
+import { Loader } from '../../../components/Loader';
 import { TablaOrdenes } from '../../../components/ordenes/TablaOrdenes';
+import { useOrdenesStore } from '../../../store/ordenesStore';
+import { cambiarEstadoOrden } from '../../../helpers/api/ordenes';
+import { useEffect } from 'react';
 
 function OrdenesInicio() {
   // Store de ordenes
-  const ordenes = [
-    {
-      id: 1,
-      fecha_orden: '2021-09-01',
-      cliente_id: 'Juan José',
-      cantidad_productos: 3,
-      estado: 'V',
-    },
-    {
-      id: 2,
-      fecha_orden: '2021-09-02',
-      cliente_id: 'María Fernanda',
-      cantidad_productos: 1,
-      estado: 'R',
-    },
-  ];
+  const { ordenes, obtener, isLoading } = useOrdenesStore();
+
+  // Obtener ordenes
+  useEffect(() => {
+    obtener();
+  }, [obtener]);
 
   // Cambiar estado de orden
-  const cambiarEstado = (orden) => {
-    console.log('Cambiar estado: ', orden);
+  const cambiarEstado = async (orden) => {
+    await cambiarEstadoOrden(orden.id, {
+      estado: orden.estado === 'V' ? 'R' : 'V',
+    });
+
+    obtener();
   };
 
   return (
@@ -43,7 +41,11 @@ function OrdenesInicio() {
       <hr className="divider" />
 
       {/* Tabla */}
-      <TablaOrdenes ordenes={ordenes} onEstado={cambiarEstado} />
+      {isLoading ? (
+        <Loader />
+      ) : (
+        <TablaOrdenes ordenes={ordenes} onEstado={cambiarEstado} />
+      )}
     </div>
   );
 }

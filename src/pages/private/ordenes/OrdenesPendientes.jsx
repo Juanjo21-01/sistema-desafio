@@ -1,52 +1,59 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { NavLink } from 'react-router';
+import { Loader } from '../../../components/Loader';
 import { TarjetasOrdenesPendientes } from '../../../components/ordenes/TarjetaOrdenesPendientes';
 import { ModalOrdenResponsable } from '../../../components/ordenes/ModalOrdenResponsable';
+import { useOrdenesStore } from '../../../store/ordenesStore';
+import {
+  cambiarEstadoOrden,
+  registerResponsableOrden,
+} from '../../../helpers/api/ordenes';
+import { useAuthStore } from '../../../store/authStore';
 
 function OrdenesPendientes() {
   // Variables de estado
   const [modalOpen, setModalOpen] = useState(false);
   const [orden, setOrden] = useState(null);
-  const [ordenesPendientes, setOrdenesPendientes] = useState([
-    {
-      id: 3,
-      fecha_orden: '2021-09-03',
-      cliente_id: 'Carlos Pérez',
-      cantidad_productos: 5,
-      detalle: [
-        { id: 1, nombre: 'Producto A', cantidad: 2, precio: 10.5 },
-        { id: 2, nombre: 'Producto B', cantidad: 3, precio: 7.99 },
-      ],
-    },
-    {
-      id: 4,
-      fecha_orden: '2021-09-04',
-      cliente_id: 'Ana Gómez',
-      cantidad_productos: 2,
-      detalle: [
-        { id: 3, nombre: 'Producto C', cantidad: 1, precio: 15.99 },
-        { id: 4, nombre: 'Producto D', cantidad: 1, precio: 12.5 },
-      ],
-    },
-  ]);
+
+  // Store de ordenes
+  const { ordenesPendientes, obtener, isLoading } = useOrdenesStore();
+
+  // Obtener las ordenes pendientes
+  useEffect(() => {
+    obtener();
+  }, [obtener]);
+
+  // Usuario autenticado
+  const { profile } = useAuthStore();
 
   // Funciones
-  const finalizarOrden = (data) => {
-    console.log('Finalizar orden', orden, data);
+  const finalizarOrden = async (data) => {
+    const encargado = {
+      orden_id: orden.id,
+      encargado_id: profile.id,
+      observaciones: data.observaciones,
+    };
+
+    await registerResponsableOrden(encargado);
+
     setModalOpen(false);
 
-    setOrdenesPendientes((prev) => prev.filter((o) => o.id !== orden.id));
+    obtener();
   };
 
-  const validarOrden = (orden) => {
-    console.log('Validar orden: ', orden);
+  const validarOrden = async (orden) => {
+    if (orden.estado !== 'P') return;
+
+    await cambiarEstadoOrden(orden.id, { estado: 'V' });
 
     setModalOpen(true);
     setOrden(orden);
   };
 
-  const rechazarOrden = (orden) => {
-    console.log('Rechazar orden: ', orden);
+  const rechazarOrden = async (orden) => {
+    if (orden.estado !== 'P') return;
+
+    await cambiarEstadoOrden(orden.id, { estado: 'R' });
 
     setModalOpen(true);
     setOrden(orden);
@@ -66,11 +73,16 @@ function OrdenesPendientes() {
 
       <hr className="divider" />
 
-      <TarjetasOrdenesPendientes
-        ordenes={ordenesPendientes}
-        onValidar={validarOrden}
-        onRechazar={rechazarOrden}
-      />
+      {/* Tarjetas */}
+      {isLoading ? (
+        <Loader />
+      ) : (
+        <TarjetasOrdenesPendientes
+          ordenes={ordenesPendientes}
+          onValidar={validarOrden}
+          onRechazar={rechazarOrden}
+        />
+      )}
 
       {/* Modal de confirmación */}
       <ModalOrdenResponsable isOpen={modalOpen} onGuardar={finalizarOrden} />
