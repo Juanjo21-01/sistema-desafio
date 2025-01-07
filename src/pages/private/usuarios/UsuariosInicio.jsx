@@ -1,7 +1,15 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { Loader } from '../../../components/Loader';
 import { TablaUsuarios } from '../../../components/usuarios/TablaUsuarios';
 import { ModalUsuario } from '../../../components/usuarios/ModalUsuario';
 import { ModalUsuarioEliminar } from '../../../components/usuarios/ModalUsuarioEliminar';
+import { useUsuariosStore } from '../../../store/usuariosStore';
+import {
+  registerUsuario,
+  updateUsuario,
+  cambiarEstadoUsuario,
+  deleteUsuario,
+} from '../../../helpers/api/usuarios';
 
 function UsuariosInicio() {
   // Variables de estado
@@ -10,26 +18,12 @@ function UsuariosInicio() {
   const [usuarioSeleccionado, setUsuarioSeleccionado] = useState(null);
 
   // Store de usuarios
-  const usuarios = [
-    {
-      id: 1,
-      nombres: 'Juan José',
-      apellidos: 'Pérez',
-      email: 'juanperez@gmail.com',
-      telefono: '1234567890',
-      estado: 'Activo',
-      rol: 'Administrador',
-    },
-    {
-      id: 2,
-      nombres: 'María Fernanda',
-      apellidos: 'López',
-      email: 'maria@gmail.com',
-      telefono: '0987654321',
-      estado: 'Inactivo',
-      rol: 'Empleado',
-    },
-  ];
+  const { usuarios, obtener, isLoading } = useUsuariosStore();
+
+  // Obtener usuarios
+  useEffect(() => {
+    obtener();
+  }, [obtener]);
 
   // Modales
   const abrirModal = () => {
@@ -48,28 +42,30 @@ function UsuariosInicio() {
   };
 
   // Guardar o editar usuario
-  const guardarUsuario = (usuario) => {
+  const guardarUsuario = async (usuario) => {
     if (usuario.id) {
       // Editar
-      console.log('Editar: ', usuario);
+      await updateUsuario(usuario.id, usuario);
     } else {
       // Crear
-      console.log('Crear: ', usuario);
+      await registerUsuario(usuario);
     }
 
     setIsModalOpen(false);
+    obtener();
   };
 
   // Cambiar estado de usuario
-  const cambiarEstado = (usuario) => {
-    console.log('Cambiar estado: ', usuario);
+  const cambiarEstado = async (usuario) => {
+    await cambiarEstadoUsuario(usuario.id, { estado: !usuario.estado });
+    obtener();
   };
 
   // Eliminar usuario
-  const eliminarUsuario = () => {
-    console.log('Eliminar: ', usuarioSeleccionado);
-
+  const eliminarUsuario = async () => {
+    await deleteUsuario(usuarioSeleccionado.id);
     setIsModalEliminarOpen(false);
+    obtener();
   };
 
   return (
@@ -85,12 +81,16 @@ function UsuariosInicio() {
       </div>
 
       {/* Tabla */}
-      <TablaUsuarios
-        usuarios={usuarios}
-        onEditar={abrirModalEditar}
-        onEliminar={abrirModalEliminar}
-        onEstado={cambiarEstado}
-      />
+      {isLoading ? (
+        <Loader />
+      ) : (
+        <TablaUsuarios
+          usuarios={usuarios}
+          onEditar={abrirModalEditar}
+          onEliminar={abrirModalEliminar}
+          onEstado={cambiarEstado}
+        />
+      )}
 
       {/* Modal  */}
       <ModalUsuario

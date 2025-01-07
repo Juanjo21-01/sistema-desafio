@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
   FaUser,
   FaEnvelope,
@@ -9,26 +9,29 @@ import {
 } from 'react-icons/fa';
 import { useParams, useNavigate } from 'react-router';
 import { ModalUsuario } from '../../../components/usuarios/ModalUsuario';
+import { getUsuarioById, updateUsuario } from '../../../helpers/api/usuarios';
+import { getRoleById } from '../../../helpers/api/roles';
+import { Loader } from '../../../components/Loader';
 
 function UsuariosDetalle() {
   // Variables de estado
+  const [usuario, setUsuario] = useState(null);
+  const [rol, setRol] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [usuarioSeleccionado, setUsuarioSeleccionado] = useState(null);
 
   const { id } = useParams();
   const navigate = useNavigate();
 
-  const usuario = {
-    id: id,
-    nombres: 'Juan José',
-    apellidos: 'Pérez González',
-    email: 'juan@example.com',
-    telefono: '12345678',
-    direccion: 'Ciudad de Guatemala, Guatemala',
-    fecha_nacimiento: '1990-01-01',
-    rol_id: 1,
-    estado: true,
-  };
+  // Usuario
+  useEffect(() => {
+    getUsuarioById(id).then((data) => setUsuario(data));
+  }, [id]);
+
+  // Rol
+  useEffect(() => {
+    if (usuario) getRoleById(usuario.rol_id).then((data) => setRol(data));
+  }, [usuario]);
 
   // Modal
   const abrirModalEditar = (usuario) => {
@@ -37,17 +40,23 @@ function UsuariosDetalle() {
   };
 
   // Editar usuario
-  const editarUsuario = (usuario) => {
+  const editarUsuario = async (usuario) => {
     if (usuario.id) {
       // Editar
-      console.log('Editar: ', usuario);
+      await updateUsuario(usuario.id, usuario);
     } else {
       // Crear
       return console.error('No se puede crear un usuario desde aquí');
     }
 
     setIsModalOpen(false);
+
+    // Actualizar el usuario
+    const usuarioActualizado = await getUsuarioById(usuario.id);
+    setUsuario(usuarioActualizado);
   };
+
+  if (!usuario) return <Loader />;
 
   return (
     <div className="card bg-base-200 shadow-xl p-4">
@@ -62,12 +71,12 @@ function UsuariosDetalle() {
             </div>
             <div
               className={`badge badge-lg font-semibold leading-tight badge-${
-                usuario.estado
+                usuario
                   ? 'success text-green-700 dark:text-green-100'
                   : 'error text-red-700 dark:text-red-100'
               }`}
             >
-              {usuario.estado ? 'Activo' : 'Inactivo'}
+              {usuario ? 'Activo' : 'Inactivo'}
             </div>
           </div>
 
@@ -119,13 +128,7 @@ function UsuariosDetalle() {
                 <FaUserTag className="text-primary" />
                 <div>
                   <p className="text-sm text-gray-500">Rol</p>
-                  <p>
-                    {usuario.rol_id === 1
-                      ? 'Administrador'
-                      : usuario.rol_id === 2
-                      ? 'Staff'
-                      : 'Cliente'}
-                  </p>
+                  <p>{rol ? rol.nombre : 'Cargando..'}</p>
                 </div>
               </div>
             </div>
