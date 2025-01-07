@@ -12,7 +12,7 @@ export const useTipoProductosStore = create((set) => ({
       const tipoProductos = await getTipoProductos();
       set({ tipoProductos, isLoading: false });
     } catch (error) {
-      console.error('Error al obtener los tipoProductos', error);
+      console.error('Error al obtener los tipo de productos', error);
       set({ isLoading: false });
     }
   },

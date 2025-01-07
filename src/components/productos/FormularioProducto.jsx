@@ -3,6 +3,8 @@ import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { productoValidation } from '../../validations/productoValidation';
+import { useTipoProductosStore } from '../../store/tipoProductosStore';
+import { useAuthStore } from '../../store/authStore';
 
 export const FormularioProducto = ({ producto, onGuardar, onClose }) => {
   // Validación con react-hook-form y yup
@@ -39,10 +41,26 @@ export const FormularioProducto = ({ producto, onGuardar, onClose }) => {
     }
   }, [producto, reset]);
 
+  // Store de tipo de productos
+  const { tipoProductos, obtener } = useTipoProductosStore();
+
+  useEffect(() => {
+    obtener();
+  }, [obtener]);
+
+  // Usuario autenticado
+  const { profile } = useAuthStore();
+
   // Enviar formulario
   const onSubmit = (data) => {
     // Agregar el id del tipo de producto si existe
     if (producto) data.id = producto.id;
+
+    // Agregar el id del usuario autenticado
+    data.usuario_id = profile.id;
+
+    // Extraer el nombre del archivo de la foto
+    if (data.foto[0]) data.foto = data.foto[0].name;
 
     onGuardar(data);
   };
@@ -95,9 +113,11 @@ export const FormularioProducto = ({ producto, onGuardar, onClose }) => {
             <option value="" disabled>
               Selecciona una categoría
             </option>
-            <option value="1">Tipo 1</option>
-            <option value="2">Tipo 2</option>
-            <option value="3">Tipo 3</option>
+            {tipoProductos.map((tipo) => (
+              <option key={tipo.id} value={tipo.id}>
+                {tipo.id}. - {tipo.nombre}
+              </option>
+            ))}
           </select>
           {errors.tipo_producto_id && (
             <span className="text-error text-sm mt-1">

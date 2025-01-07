@@ -92,7 +92,7 @@ export const updateProducto = async (id, data) => {
 export const cambiarEstadoProducto = async (id, { estado }) => {
   try {
     // Petición
-    const response = await api.patch(`productos/cambiar-estado/${id}`, {
+    const response = await api.patch(`productos/cambiarEstado/${id}`, {
       estado,
     });
 

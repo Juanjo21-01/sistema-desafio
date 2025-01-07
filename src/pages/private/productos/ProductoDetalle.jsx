@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router';
 import {
   FaBox,
@@ -7,28 +7,28 @@ import {
   FaLayerGroup,
   FaTags,
   FaBoxOpen,
+  FaUserTag,
 } from 'react-icons/fa';
 import { ModalProducto } from '../../../components/productos/ModalProducto';
+import {
+  getProductoById,
+  updateProducto,
+} from '../../../helpers/api/productos';
+import { Loader } from '../../../components/Loader';
 
 function ProductoDetalle() {
   // Variables de estado
+  const [producto, setProducto] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [productoSeleccionado, setProductoSeleccionado] = useState(null);
 
   const { id } = useParams();
   const navigate = useNavigate();
 
-  const producto = {
-    id: id,
-    tipo_producto_id: 'Computadoras',
-    nombre: 'Laptop HP',
-    marca: 'HP',
-    codigo: 'HP-123',
-    precio_unitario: 1000,
-    stock: 10,
-    estado: true,
-    foto: 'https://picsum.photos/200',
-  };
+  // Producto
+  useEffect(() => {
+    getProductoById(id).then((data) => setProducto(data));
+  }, [id]);
 
   // Modal
   const abrirModalEditar = (producto) => {
@@ -37,17 +37,23 @@ function ProductoDetalle() {
   };
 
   // Editar producto
-  const editarProducto = (producto) => {
+  const editarProducto = async (producto) => {
     if (producto.id) {
       // Editar
-      console.log('Editar: ', producto);
+      await updateProducto(producto.id, producto);
     } else {
       // Crear
       return console.error('No se puede crear un producto desde aquí');
     }
 
     setIsModalOpen(false);
+
+    // Actualizar el producto
+    const productoActualizado = await getProductoById(producto.id);
+    setProducto(productoActualizado);
   };
+
+  if (!producto) return <Loader />;
 
   return (
     <div className="card bg-base-200 shadow-xl p-4">
@@ -57,7 +63,7 @@ function ProductoDetalle() {
           <div className="flex flex-col items-center gap-4">
             <div className="w-48 h-48 rounded-xl ring ring-primary ring-offset-base-100 ring-offset-2">
               <img
-                src={producto.foto}
+                src="https://picsum.photos/200"
                 alt={producto.nombre}
                 className="w-full h-full object-cover rounded-xl"
               />
@@ -81,7 +87,9 @@ function ProductoDetalle() {
                 <FaLayerGroup className="text-primary text-xl" />
                 <div>
                   <p className="text-sm text-gray-500">Categoría</p>
-                  <p className="font-semibold">{producto.tipo_producto_id}</p>
+                  <p className="font-semibold">
+                    {producto.tipo_producto_id.nombre}
+                  </p>
                 </div>
               </div>
 
@@ -137,21 +145,35 @@ function ProductoDetalle() {
           </div>
         </div>
 
-        {/* Botones de Acción */}
         <div className="divider "></div>
-        <div className="card-actions justify-end gap-4">
-          <button
-            onClick={() => navigate('/productos')}
-            className="btn btn-neutral btn-outline"
-          >
-            Volver
-          </button>
-          <button
-            onClick={() => abrirModalEditar(producto)}
-            className="btn btn-warning text-white"
-          >
-            Editar Producto
-          </button>
+
+        <div className="flex justify-between gap-4">
+          {/* usuario que ingreso el producto */}
+          <div className="flex items-center gap-2">
+            <FaUserTag className="text-primary" />
+            <div>
+              <p className="text-sm text-gray-500">Encargado:</p>
+              <p>
+                {producto.usuario_id.nombres} {producto.usuario_id.apellidos}
+              </p>
+            </div>
+          </div>
+
+          {/* Botones de Acción */}
+          <div className="card-actions justify-end gap-4">
+            <button
+              onClick={() => navigate('/productos')}
+              className="btn btn-neutral btn-outline"
+            >
+              Volver
+            </button>
+            <button
+              onClick={() => abrirModalEditar(producto)}
+              className="btn btn-warning text-white"
+            >
+              Editar Producto
+            </button>
+          </div>
         </div>
       </div>
 

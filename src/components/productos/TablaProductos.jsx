@@ -34,7 +34,7 @@ export const TablaProductos = ({
           {productos.map((producto) => (
             <tr key={producto.id}>
               <td className="font-semibold">{producto.id}</td>
-              <td>{producto.tipo_producto_id}</td>
+              <td>{producto.tipo_producto_id.nombre}</td>
               <td>{producto.nombre}</td>
               <td>{producto.marca}</td>
               <td>{producto.precio_unitario}</td>
@@ -43,12 +43,12 @@ export const TablaProductos = ({
                 <button
                   onClick={() => onEstado(producto)}
                   className={`btn btn-xs font-semibold leading-tight ${
-                    producto.estado === 'Activo'
+                    producto.estado
                       ? 'btn-success text-green-700 dark:text-green-100'
                       : 'btn-error text-red-700 dark:text-red-100'
                   }`}
                 >
-                  {producto.estado}
+                  {producto.estado ? 'Activo' : 'Inactivo'}
                 </button>
               </td>
               <td>

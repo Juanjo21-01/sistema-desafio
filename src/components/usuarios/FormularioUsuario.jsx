@@ -244,8 +244,8 @@ export const FormularioUsuario = ({ usuario, onGuardar, onClose }) => {
             <option value="" disabled>
               Selecciona un rol
             </option>
-            <option value="2">Empleado</option>
-            <option value="3">Cliente</option>
+            <option value="2">1. - Empleado</option>
+            <option value="3">2. - Cliente</option>
           </select>
           {errors.rol_id && (
             <span className="text-error text-sm mt-1">
