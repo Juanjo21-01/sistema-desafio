@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { NavLink } from 'react-router';
 import {
   FaTrash,
@@ -8,53 +7,11 @@ import {
   FaShoppingBag,
   FaShoppingCart,
 } from 'react-icons/fa';
+import { useCarritoStore } from '../../store/carritoStore';
 
 export const ResumenCarrito = () => {
-  const [carrito, setCarrito] = useState([
-    {
-      id: 1,
-      nombre: 'Producto A',
-      precio: 10,
-      cantidad: 2,
-      imagen: 'https://picsum.photos/50',
-    },
-    {
-      id: 2,
-      nombre: 'Producto B',
-      precio: 20,
-      cantidad: 1,
-      imagen: 'https://picsum.photos/50',
-    },
-    {
-      id: 3,
-      nombre: 'Producto C',
-      precio: 15,
-      cantidad: 3,
-      imagen: 'https://picsum.photos/50',
-    },
-  ]);
-
-  // Calcular total
-  const calcularTotal = () => {
-    return carrito.reduce(
-      (total, item) => total + item.precio * item.cantidad,
-      0
-    );
-  };
-
-  // Modificar cantidad
-  const modificarCantidad = (id, nuevaCantidad) => {
-    setCarrito((prevCarrito) =>
-      prevCarrito.map((item) =>
-        item.id === id ? { ...item, cantidad: nuevaCantidad } : item
-      )
-    );
-  };
-
-  // Eliminar producto
-  const eliminarProducto = (id) => {
-    setCarrito((prevCarrito) => prevCarrito.filter((item) => item.id !== id));
-  };
+  const { carrito, total, modificarCantidad, eliminarProducto } =
+    useCarritoStore();
 
   if (carrito.length === 0) {
     return (
@@ -83,7 +40,7 @@ export const ResumenCarrito = () => {
               <div className="flex items-center gap-4">
                 {/* Imagen */}
                 <img
-                  src={producto.imagen}
+                  src="https://picsum.photos/200"
                   alt={producto.nombre}
                   className="w-24 h-24 object-cover rounded-lg hidden lg:block"
                 />
@@ -92,7 +49,7 @@ export const ResumenCarrito = () => {
                 <div className="flex-1">
                   <h3 className="font-bold text-lg">{producto.nombre}</h3>
                   <p className="text-primary font-semibold">
-                    Q{producto.precio.toFixed(2)}
+                    Q{producto.precio_unitario.toFixed(2)}
                   </p>
 
                   {/* Controles de Cantidad */}
@@ -112,18 +69,13 @@ export const ResumenCarrito = () => {
                       value={producto.cantidad}
                       min={1}
                       disabled
-                      onChange={(e) =>
-                        modificarCantidad(
-                          producto.id,
-                          parseInt(e.target.value, 10)
-                        )
-                      }
                     />
                     <button
                       className="btn btn-sm btn-circle btn-primary text-base-100"
                       onClick={() =>
                         modificarCantidad(producto.id, producto.cantidad + 1)
                       }
+                      disabled={producto.cantidad >= producto.stock}
                     >
                       <FaPlus />
                     </button>
@@ -133,7 +85,7 @@ export const ResumenCarrito = () => {
                 {/* Subtotal y Acciones */}
                 <div className="text-right">
                   <p className="font-semibold mb-2">
-                    Q{(producto.precio * producto.cantidad).toFixed(2)}
+                    Q{(producto.precio_unitario * producto.cantidad).toFixed(2)}
                   </p>
                   <button
                     className="btn btn-error btn-sm btn-outline"
@@ -159,14 +111,12 @@ export const ResumenCarrito = () => {
             <div className="space-y-3">
               <div className="flex justify-between">
                 <span>Subtotal</span>
-                <span>Q{calcularTotal().toFixed(2)}</span>
+                <span>Q{total.toFixed(2)}</span>
               </div>
               <div className="divider my-2"></div>
               <div className="flex justify-between text-lg font-bold">
                 <span>Total</span>
-                <span className="text-primary">
-                  Q{calcularTotal().toFixed(2)}
-                </span>
+                <span className="text-primary">Q{total.toFixed(2)}</span>
               </div>
             </div>
 

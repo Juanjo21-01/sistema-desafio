@@ -2,11 +2,15 @@ import { NavLink } from 'react-router';
 import { useAuthStore } from '../../store/authStore';
 import { FaCartPlus, FaRegUser } from 'react-icons/fa6';
 import { FaShoppingBag, FaSignOutAlt } from 'react-icons/fa';
+import { useCarritoStore } from '../../store/carritoStore';
 
 export const Header = () => {
   // Usuario
   const usuario = useAuthStore((state) => state.profile);
   const logout = useAuthStore((state) => state.logout);
+
+  // Store de carrito
+  const { carrito, total, cantidad } = useCarritoStore();
 
   // Cerrar Sesión
   const cerrarSesion = () => {
@@ -44,9 +48,11 @@ export const Header = () => {
             >
               <div className="indicator">
                 <FaCartPlus className="h-5 w-5 text-white" />
-                <span className="badge badge-warning badge-sm indicator-item animate-pulse font-bold">
-                  1
-                </span>
+                {cantidad > 0 && (
+                  <span className="badge badge-warning badge-sm indicator-item animate-pulse font-bold">
+                    {cantidad}
+                  </span>
+                )}
               </div>
             </button>
 
@@ -57,33 +63,68 @@ export const Header = () => {
               <div className="card-body">
                 <div className="flex justify-between items-center">
                   <h3 className="font-bold text-lg">Mi Carrito</h3>
-                  <span className="badge badge-warning">1 Producto</span>
+                  <span className="badge badge-warning">
+                    {cantidad == 1 ? '1 Producto' : `${cantidad} Productos`}
+                  </span>
                 </div>
 
-                <div className="divider my-0"></div>
-
-                <div className="flex items-center gap-4 py-2">
-                  <div className="flex-1">
-                    <h4 className="font-semibold">Nombre del Producto</h4>
-                    <p className="text-sm text-gray-600">Cantidad: 1</p>
+                {total == 0 ? (
+                  <div className="text-center mt-4 flex flex-col items-center gap-2">
+                    <FaCartPlus className="text-6xl text-gray-500" />
+                    <p className="text-gray-500 mt-4">
+                      Tu carrito de compras está vacío
+                    </p>
                   </div>
-                  <span className="font-bold">Q100.00</span>
-                </div>
+                ) : (
+                  <>
+                    <div className="divider my-0"></div>
 
-                <div className="divider my-0"></div>
+                    {carrito.map((producto) => (
+                      <div
+                        key={producto.id}
+                        className="flex items-center gap-4 py-2"
+                      >
+                        <div className="w-12 h-12">
+                          <img
+                            src="https://picsum.photos/200"
+                            alt={producto.nombre}
+                            className="w-full h-full object-cover rounded-lg"
+                          />
+                        </div>
+                        <div className="flex-1">
+                          <h4 className="font-semibold">{producto.nombre}</h4>
+                          <p className="text-sm text-gray-600">
+                            Cantidad: {producto.cantidad}
+                          </p>
+                        </div>
+                        <span className="font-bold">
+                          Q
+                          {(
+                            producto.precio_unitario * producto.cantidad
+                          ).toFixed(2)}
+                        </span>
+                      </div>
+                    ))}
 
-                <div className="flex justify-between items-center font-bold">
-                  <span>Subtotal:</span>
-                  <span className="text-primary">Q100.00</span>
-                </div>
+                    <div className="divider my-0"></div>
+
+                    <div className="flex justify-between items-center font-bold">
+                      <span>Total:</span>
+                      <span className="text-primary">Q{total.toFixed(2)}</span>
+                    </div>
+                  </>
+                )}
 
                 <div className="card-actions mt-4">
                   <NavLink to="/carrito" className="btn btn-warning btn-block">
                     Ver Carrito
                   </NavLink>
-                  <button className="btn btn-ghost btn-block btn-sm underline">
+                  <NavLink
+                    to="/inicio"
+                    className="btn btn-ghost btn-block btn-sm underline"
+                  >
                     Seguir Comprando
-                  </button>
+                  </NavLink>
                 </div>
               </div>
             </div>

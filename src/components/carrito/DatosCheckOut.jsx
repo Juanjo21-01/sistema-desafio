@@ -1,38 +1,38 @@
-import { useState } from 'react';
 import { useNavigate } from 'react-router';
 import { FaShoppingBag } from 'react-icons/fa';
+import { useCarritoStore } from '../../store/carritoStore';
+import { registerOrden } from '../../helpers/api/ordenes';
+import { useAuthStore } from '../../store/authStore';
 
 export const DatosCheckout = () => {
   const navigate = useNavigate();
-  const [carrito, setCarrito] = useState([
-    {
-      id: 1,
-      nombre: 'Producto A',
-      precio_unitario: 10,
-      cantidad: 2,
-    },
-    {
-      id: 2,
-      nombre: 'Producto B',
-      precio_unitario: 20,
-      cantidad: 1,
-    },
-  ]);
 
-  const calcularTotal = () => {
-    return carrito.reduce(
-      (total, item) => total + item.precio_unitario * item.cantidad,
-      0
-    );
-  };
+  // Store de carrito
+  const { carrito, total, vaciarCarrito } = useCarritoStore();
 
-  const confirmarCompra = () => {
+  // Usuario autenticado
+  const { profile } = useAuthStore();
+
+  const confirmarCompra = async () => {
+    // Detalle de la orden
+    const detalles = carrito.map((item) => ({
+      producto_id: item.id,
+      cantidad: item.cantidad,
+      precio_unitario: item.precio_unitario.toFixed(2),
+    }));
+
     const orden = {
-      detalle: carrito,
-      total: calcularTotal(),
+      fecha_orden: new Date().toISOString().slice(0, 10),
+      cliente_id: profile.id,
+      detalles,
     };
-    console.log('Orden:', orden);
-    navigate('/');
+
+    await registerOrden(orden);
+
+    // Vaciar carrito
+    vaciarCarrito();
+
+    navigate('/inicio');
   };
 
   return (
@@ -74,9 +74,7 @@ export const DatosCheckout = () => {
           <div className="text-right w-64">
             <div className="flex justify-between text-lg font-bold">
               <span>Total:</span>
-              <span className="text-primary">
-                Q{calcularTotal().toFixed(2)}
-              </span>
+              <span className="text-primary">Q{total.toFixed(2)}</span>
             </div>
           </div>
         </div>

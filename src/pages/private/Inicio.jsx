@@ -1,70 +1,41 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { NavLink } from 'react-router';
 import { Loader } from '../../components/Loader';
 import { FaSearch, FaShoppingCart, FaBox } from 'react-icons/fa';
+import { useCarritoStore } from '../../store/carritoStore';
+import { useProductosStore } from '../../store/productosStore';
+import { toast } from 'sonner';
 
 function Inicio() {
   // Variables de estado
   const [busqueda, setBusqueda] = useState('');
-  const [carrito, setCarrito] = useState([]);
 
-  const productos = [
-    {
-      id: 1,
-      tipo_producto_id: 'Computadoras',
-      nombre: 'Laptop HP',
-      marca: 'lg',
-      codigo: 'HP-123',
-      precio_unitario: 1000,
-      stock: 10,
-      estado: true,
-      foto: 'https://picsum.photos/200',
-    },
-    {
-      id: 2,
-      tipo_producto_id: 'Computadoras',
-      nombre: 'Laptop HP',
-      marca: 'Samsung',
-      codigo: 'HP-123',
-      precio_unitario: 1000,
-      stock: 10,
-      estado: true,
-      foto: 'https://picsum.photos/200',
-    },
-    {
-      id: 3,
-      tipo_producto_id: 'Computadoras',
-      nombre: 'Laptop HP',
-      marca: 'HP',
-      codigo: 'HP-123',
-      precio_unitario: 1000,
-      stock: 0,
-      estado: true,
-      foto: 'https://picsum.photos/200',
-    },
-    {
-      id: 4,
-      tipo_producto_id: 'Computadoras',
-      nombre: 'Laptop HP',
-      marca: 'HP',
-      codigo: 'HP-123',
-      precio_unitario: 1000,
-      stock: 10,
-      estado: true,
-      foto: 'https://picsum.photos/200',
-    },
-    {
-      id: 5,
-      tipo_producto_id: 'Computadoras',
-      nombre: 'Laptop HP',
-      marca: 'HP',
-      codigo: 'HP-123',
-      precio_unitario: 1000,
-      stock: 10,
-      estado: true,
-      foto: 'https://picsum.photos/200',
-    },
-  ];
+  // Store de carrito
+  const { agregarProducto } = useCarritoStore();
+  // Store de productos
+  const { productos, obtener } = useProductosStore();
+
+  // Agregar al carrito
+  const agregarCarrito = (producto) => {
+    const productoCarrito = {
+      ...producto,
+      cantidad: 1,
+      precio_unitario: producto.precio_unitario * 1.12,
+    };
+
+    const hayStock = agregarProducto(productoCarrito);
+
+    if (hayStock) {
+      toast.success('Producto agregado al carrito');
+    } else {
+      toast.error('No hay suficiente stock');
+    }
+  };
+
+  // Obtener productos
+  useEffect(() => {
+    obtener();
+  }, [obtener]);
 
   // Filtrar productos
   const productosFiltrados = productos.filter(
@@ -72,16 +43,6 @@ function Inicio() {
       producto.nombre.toLowerCase().includes(busqueda.toLowerCase()) ||
       producto.marca.toLowerCase().includes(busqueda.toLowerCase())
   );
-
-  // Agregar al carrito
-  const agregarCarrito = (producto) => {
-    // Verificar si el producto ya está en el carrito
-    const productoExistente = carrito.find((p) => p.id === producto.id);
-    if (productoExistente) return;
-    setCarrito([...carrito, producto]);
-  };
-
-  console.log('Carrito:', carrito);
 
   return (
     <div className="container mx-auto p-4">
@@ -112,7 +73,7 @@ function Inicio() {
             {/* Imagen */}
             <figure className="relative">
               <img
-                src={producto.foto}
+                src="https://picsum.photos/200"
                 alt={producto.nombre}
                 className="h-48 w-full object-cover"
               />
@@ -122,7 +83,7 @@ function Inicio() {
                     producto.stock === 0 ? 'badge-error' : 'badge-success'
                   }`}
                 >
-                  {producto.tipo_producto_id}
+                  {producto.tipo_producto_id.nombre}
                 </div>
               </div>
             </figure>
@@ -143,7 +104,7 @@ function Inicio() {
                   <span className="text-sm">Stock: {producto.stock}</span>
                 </div>
                 <span className="text-xl font-bold text-primary">
-                  Q{producto.precio_unitario.toFixed(2)}
+                  Q{(producto.precio_unitario * 1.12).toFixed(2)}
                 </span>
               </div>
 
