@@ -84,7 +84,7 @@ export const updateProveedor = async (id, data) => {
 export const cambiarEstadoProveedor = async (id, { estado }) => {
   try {
     // Petición
-    const response = await api.patch(`proveedores/cambiar-estado/${id}`, {
+    const response = await api.patch(`proveedores/cambiarEstado/${id}`, {
       estado,
     });
 

@@ -1,7 +1,15 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { Loader } from '../../../components/Loader';
 import { TablaProveedores } from '../../../components/proveedores/TablaProveedores';
 import { ModalProveedor } from '../../../components/proveedores/ModalProveedor';
 import { ModalProveedorEliminar } from '../../../components/proveedores/ModalProveedorEliminar';
+import { useProveedoresStore } from '../../../store/proveedoresStore';
+import {
+  registerProveedor,
+  updateProveedor,
+  cambiarEstadoProveedor,
+  deleteProveedor,
+} from '../../../helpers/api/proveedores';
 
 function ProveedoresInicio() {
   // Variables de estado
@@ -10,24 +18,12 @@ function ProveedoresInicio() {
   const [proveedorSeleccionado, setProveedorSeleccionado] = useState(null);
 
   // Store de proveedores
-  const proveedores = [
-    {
-      id: 1,
-      nombre: 'Juan José',
-      direccion: 'Ciudad de Guatemala, Guatemala',
-      nit: '123456789',
-      telefono: '1234567890',
-      estado: 'Activo',
-    },
-    {
-      id: 2,
-      nombre: 'María Fernanda',
-      direccion: 'Ciudad de Guatemala, Guatemala',
-      nit: '987654321',
-      telefono: '0987654321',
-      estado: 'Inactivo',
-    },
-  ];
+  const { proveedores, obtener, isLoading } = useProveedoresStore();
+
+  // Obtener proveedores
+  useEffect(() => {
+    obtener();
+  }, [obtener]);
 
   // Modales
   const abrirModal = () => {
@@ -46,28 +42,30 @@ function ProveedoresInicio() {
   };
 
   // Guardar o editar proveedor
-  const guardarProveedor = (proveedor) => {
+  const guardarProveedor = async (proveedor) => {
     if (proveedor.id) {
       // Editar
-      console.log('Editar: ', proveedor);
+      await updateProveedor(proveedor.id, proveedor);
     } else {
       // Crear
-      console.log('Crear: ', proveedor);
+      await registerProveedor(proveedor);
     }
 
     setIsModalOpen(false);
+    obtener();
   };
 
   // Cambiar estado de proveedor
-  const cambiarEstado = (proveedor) => {
-    console.log('Cambiar estado: ', proveedor);
+  const cambiarEstado = async (proveedor) => {
+    await cambiarEstadoProveedor(proveedor.id, { estado: !proveedor.estado });
+    obtener();
   };
 
   // Eliminar proveedor
-  const eliminarProveedor = () => {
-    console.log('Eliminar: ', proveedorSeleccionado);
-
+  const eliminarProveedor = async () => {
+    await deleteProveedor(proveedorSeleccionado.id);
     setIsModalEliminarOpen(false);
+    obtener();
   };
 
   return (
@@ -83,12 +81,16 @@ function ProveedoresInicio() {
       </div>
 
       {/* Tabla */}
-      <TablaProveedores
-        proveedores={proveedores}
-        onEditar={abrirModalEditar}
-        onEliminar={abrirModalEliminar}
-        onEstado={cambiarEstado}
-      />
+      {isLoading ? (
+        <Loader />
+      ) : (
+        <TablaProveedores
+          proveedores={proveedores}
+          onEditar={abrirModalEditar}
+          onEliminar={abrirModalEliminar}
+          onEstado={cambiarEstado}
+        />
+      )}
 
       {/* Modal  */}
       <ModalProveedor

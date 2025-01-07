@@ -31,7 +31,11 @@ export const Navegacion = () => {
             <div>
               <h3 className="font-bold">{usuario.nombres}</h3>
               <p className="text-sm text-gray-600">
-                {usuario.rol_id == 1 ? 'Administrador' : 'Cliente'}
+                {usuario.rol_id == 1
+                  ? 'Administrador'
+                  : usuario.rol_id == 2
+                  ? 'Empleado'
+                  : 'Cliente'}
               </p>
             </div>
           </div>

@@ -41,12 +41,12 @@ export const TablaProveedores = ({
                 <button
                   onClick={() => onEstado(proveedor)}
                   className={`btn btn-xs font-semibold leading-tight ${
-                    proveedor.estado === 'Activo'
+                    proveedor.estado
                       ? 'btn-success text-green-700 dark:text-green-100'
                       : 'btn-error text-red-700 dark:text-red-100'
                   }`}
                 >
-                  {proveedor.estado}
+                  {proveedor.estado ? 'Activo' : 'Inactivo'}
                 </button>
               </td>
               <td>

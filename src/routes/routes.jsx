@@ -74,7 +74,7 @@ const Rutas = () => {
             {/* -> Productos */}
             <Route
               path="/productos"
-              element={<RutaProtegidaRol rolesPermitidos={[1, 2, 3]} />}
+              element={<RutaProtegidaRol rolesPermitidos={[1, 2]} />}
             >
               <Route index element={<ProductosInicio />} />
               <Route path=":id" element={<ProductoDetalle />} />

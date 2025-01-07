@@ -1,25 +1,27 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router';
 import { FaUser, FaPhone, FaMapMarkerAlt } from 'react-icons/fa';
 import { MdOutlineNumbers } from 'react-icons/md';
 import { ModalProveedor } from '../../../components/proveedores/ModalProveedor';
+import {
+  getProveedorById,
+  updateProveedor,
+} from '../../../helpers/api/proveedores';
+import { Loader } from '../../../components/Loader';
 
 function ProveedorDetalle() {
   // Variables de estado
+  const [proveedor, setProveedor] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [proveedorSeleccionado, setProveedorSeleccionado] = useState(null);
 
   const { id } = useParams();
   const navigate = useNavigate();
 
-  const proveedor = {
-    id: id,
-    nombre: 'Juan José',
-    direccion: 'Ciudad de Guatemala, Guatemala',
-    nit: '12345678',
-    telefono: '12345678',
-    estado: true,
-  };
+  // Proveedor
+  useEffect(() => {
+    getProveedorById(id).then((data) => setProveedor(data));
+  }, [id]);
 
   // Modal
   const abrirModalEditar = (proveedor) => {
@@ -28,17 +30,23 @@ function ProveedorDetalle() {
   };
 
   // Editar proveedor
-  const editarProveedor = (proveedor) => {
+  const editarProveedor = async (proveedor) => {
     if (proveedor.id) {
       // Editar
-      console.log('Editar: ', proveedor);
+      await updateProveedor(proveedor.id, proveedor);
     } else {
       // Crear
       return console.error('No se puede crear un proveedor desde aquí');
     }
 
     setIsModalOpen(false);
+
+    // Actualizar el proveedor
+    const proveedorActualizado = await getProveedorById(proveedor.id);
+    setProveedor(proveedorActualizado);
   };
+
+  if (!proveedor) return <Loader />;
 
   return (
     <div className="card bg-base-200 shadow-xl p-4">

@@ -9,8 +9,8 @@ export const RutaProtegidaRol = ({ rolesPermitidos }) => {
   if (!profile) return <Navigate to="/" replace />;
 
   // Validar roles
-  // if (!rolesPermitidos.includes(profile.rol))
-  //   return <Navigate to="/no-autorizado" replace />;
+  if (!rolesPermitidos.includes(profile.rol_id))
+    return <Navigate to="/no-autorizado" replace />;
 
   return <Outlet />;
 };
