@@ -10,13 +10,11 @@ import {
 import { useParams, useNavigate } from 'react-router';
 import { ModalUsuario } from '../../../components/usuarios/ModalUsuario';
 import { getUsuarioById, updateUsuario } from '../../../helpers/api/usuarios';
-import { getRoleById } from '../../../helpers/api/roles';
 import { Loader } from '../../../components/Loader';
 
 function UsuariosDetalle() {
   // Variables de estado
   const [usuario, setUsuario] = useState(null);
-  const [rol, setRol] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [usuarioSeleccionado, setUsuarioSeleccionado] = useState(null);
 
@@ -27,11 +25,6 @@ function UsuariosDetalle() {
   useEffect(() => {
     getUsuarioById(id).then((data) => setUsuario(data));
   }, [id]);
-
-  // Rol
-  useEffect(() => {
-    if (usuario) getRoleById(usuario.rol_id).then((data) => setRol(data));
-  }, [usuario]);
 
   // Modal
   const abrirModalEditar = (usuario) => {
@@ -128,7 +121,7 @@ function UsuariosDetalle() {
                 <FaUserTag className="text-primary" />
                 <div>
                   <p className="text-sm text-gray-500">Rol</p>
-                  <p>{rol ? rol.nombre : 'Cargando..'}</p>
+                  <p>{usuario.rol_id.nombre}</p>
                 </div>
               </div>
             </div>
