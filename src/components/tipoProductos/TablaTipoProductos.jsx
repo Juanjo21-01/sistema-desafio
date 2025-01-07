@@ -35,12 +35,12 @@ export const TablaTipoProductos = ({
                 <button
                   onClick={() => onEstado(tipoProducto)}
                   className={`btn btn-xs font-semibold leading-tight ${
-                    tipoProducto.estado === 'Activo'
+                    tipoProducto.estado
                       ? 'btn-success text-green-700 dark:text-green-100'
                       : 'btn-error text-red-700 dark:text-red-100'
                   }`}
                 >
-                  {tipoProducto.estado}
+                  {tipoProducto.estado ? 'Activo' : 'Inactivo'}
                 </button>
               </td>
               <td>

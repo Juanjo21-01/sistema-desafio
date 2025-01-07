@@ -1,10 +1,16 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router';
 import { FaBox, FaLayerGroup } from 'react-icons/fa';
 import { ModalTipoProducto } from '../../../components/tipoProductos/ModalTipoProducto';
+import {
+  getTipoProductoById,
+  updateTipoProducto,
+} from '../../../helpers/api/tipoProductos';
+import { Loader } from '../../../components/Loader';
 
 function TipoProductoDetalle() {
   // Variables de estado
+  const [tipoProducto, setTipoProducto] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [tipoProductoSeleccionado, setTipoProductoSeleccionado] =
     useState(null);
@@ -12,11 +18,10 @@ function TipoProductoDetalle() {
   const { id } = useParams();
   const navigate = useNavigate();
 
-  const tipoProducto = {
-    id: id,
-    nombre: 'Computadoras',
-    estado: true,
-  };
+  // Tipo de producto
+  useEffect(() => {
+    getTipoProductoById(id).then((data) => setTipoProducto(data));
+  }, [id]);
 
   // Modal
   const abrirModalEditar = (tipoProducto) => {
@@ -25,17 +30,23 @@ function TipoProductoDetalle() {
   };
 
   // Editar tipoProducto
-  const editarTipoProducto = (tipoProducto) => {
+  const editarTipoProducto = async (tipoProducto) => {
     if (tipoProducto.id) {
       // Editar
-      console.log('Editar: ', tipoProducto);
+      await updateTipoProducto(tipoProducto.id, tipoProducto);
     } else {
       // Crear
       return console.error('No se puede crear un tipoProducto desde aquí');
     }
 
     setIsModalOpen(false);
+
+    // Actualizar el tipoProducto
+    const tipoProductoActualizado = await getTipoProductoById(tipoProducto.id);
+    setTipoProducto(tipoProductoActualizado);
   };
+
+  if (!tipoProducto) return <Loader />;
 
   return (
     <div className="card bg-base-200 shadow-xl p-4">

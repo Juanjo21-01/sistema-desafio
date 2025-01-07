@@ -1,7 +1,15 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { Loader } from '../../../components/Loader';
 import { TablaTipoProductos } from '../../../components/tipoProductos/TablaTipoProductos';
 import { ModalTipoProducto } from '../../../components/tipoProductos/ModalTipoProducto';
 import { ModalTipoProductoEliminar } from '../../../components/tipoProductos/ModalTipoProductoEliminar';
+import { useTipoProductosStore } from '../../../store/tipoProductosStore';
+import {
+  registerTipoProducto,
+  updateTipoProducto,
+  cambiarEstadoTipoProducto,
+  deleteTipoProducto,
+} from '../../../helpers/api/tipoProductos';
 
 function TipoProductosInicio() {
   // Variables de estado
@@ -11,18 +19,12 @@ function TipoProductosInicio() {
     useState(null);
 
   // Store de tipoProductos
-  const tipoProductos = [
-    {
-      id: 1,
-      nombre: 'Computadoras',
-      estado: 'Activo',
-    },
-    {
-      id: 2,
-      nombre: 'Electrodomésticos',
-      estado: 'Inactivo',
-    },
-  ];
+  const { tipoProductos, obtener, isLoading } = useTipoProductosStore();
+
+  // Obtener tipo de productos
+  useEffect(() => {
+    obtener();
+  }, [obtener]);
 
   // Modales
   const abrirModal = () => {
@@ -41,28 +43,32 @@ function TipoProductosInicio() {
   };
 
   // Guardar o editar tipo de producto
-  const guardarTipoProducto = (tipoProducto) => {
+  const guardarTipoProducto = async (tipoProducto) => {
     if (tipoProducto.id) {
       // Editar
-      console.log('Editar: ', tipoProducto);
+      await updateTipoProducto(tipoProducto.id, tipoProducto);
     } else {
       // Crear
-      console.log('Crear: ', tipoProducto);
+      await registerTipoProducto(tipoProducto);
     }
 
     setIsModalOpen(false);
+    obtener();
   };
 
   // Cambiar estado de tipo de producto
-  const cambiarEstado = (tipoProducto) => {
-    console.log('Cambiar estado: ', tipoProducto);
+  const cambiarEstado = async (tipoProducto) => {
+    await cambiarEstadoTipoProducto(tipoProducto.id, {
+      estado: !tipoProducto.estado,
+    });
+    obtener();
   };
 
   // Eliminar tipo de producto
-  const eliminarTipoProducto = () => {
-    console.log('Eliminar: ', tipoProductoSeleccionado);
-
+  const eliminarTipoProducto = async () => {
+    await deleteTipoProducto(tipoProductoSeleccionado.id);
     setIsModalEliminarOpen(false);
+    obtener();
   };
 
   return (
@@ -78,12 +84,16 @@ function TipoProductosInicio() {
       </div>
 
       {/* Tabla */}
-      <TablaTipoProductos
-        tipoProductos={tipoProductos}
-        onEditar={abrirModalEditar}
-        onEliminar={abrirModalEliminar}
-        onEstado={cambiarEstado}
-      />
+      {isLoading ? (
+        <Loader />
+      ) : (
+        <TablaTipoProductos
+          tipoProductos={tipoProductos}
+          onEditar={abrirModalEditar}
+          onEliminar={abrirModalEliminar}
+          onEstado={cambiarEstado}
+        />
+      )}
 
       {/* Modal  */}
       <ModalTipoProducto
